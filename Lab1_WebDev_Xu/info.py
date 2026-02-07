@@ -3,7 +3,7 @@
 # -----------------------
 # About Me
 # -----------------------
-profile_picture = "images/profile.jpg"
+profile_picture = "../images/profile.jpg"
 about_me = (
     "Hi! I'm Haohan Xu (徐浩涵) from China. "
     "I'm studying Industrial Design at the Georgia Institute of Technology. "
