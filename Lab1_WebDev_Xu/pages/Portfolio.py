@@ -17,7 +17,7 @@ import info
 # =======================
 def about_me_section():
     st.header("About Me")
-    st.image("../images/profile.jpg", width=200)
+    st.image(os.path.join(BASE_DIR, "images", "profile.jpg"), width=200)
     st.write(info.about_me)
     st.write("---")
 
@@ -140,7 +140,7 @@ def activities_section(leadership_data, activity_data):
         st.subheader("Leadership")
         for title, (details, image) in leadership_data.items():
             expander = st.expander(f"{title}")
-            expander.image(image, width=250)
+            expander.image(os.path.join(BASE_DIR, image), width=250)
             for bullet in details:
                 expander.write(bullet)
 
