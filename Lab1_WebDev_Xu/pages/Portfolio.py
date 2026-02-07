@@ -17,7 +17,7 @@ import info
 # =======================
 def about_me_section():
     st.header("About Me")
-    st.image(info.profile_picture, width=200)
+    st.image("../images/profile.jpg", width=200)
     st.write(info.about_me)
     st.write("---")
 
