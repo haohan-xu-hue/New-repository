@@ -1,11 +1,17 @@
+import os
 import streamlit as st
+
+# ====== Path setup (works locally + Streamlit Cloud) ======
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+def img_path(filename: str) -> str:
+    return os.path.join(BASE_DIR, "images", filename)
 
 st.set_page_config(page_title="Travel Quiz", page_icon="🧳")
 
 st.title("Travel Preference Quiz")
 st.write("Lab 1 Quiz - answer 5 questions to find your style!")
 
-st.image("images/travel1.jpg", caption="Travel Pic 1")
+st.image(img_path("travel1.jpg"), caption="Travel Pic 1")
 st.divider()
 
 if "city" not in st.session_state:
@@ -34,19 +40,19 @@ q1_ans = st.radio(
 )
 
 if st.button("Submit Q1"):
-    if st.session_state.q1 == True:
+    if st.session_state.q1 is True:
         st.warning("Oops! Q1 already done")
     else:
-        if q1_ans == None:
+        if q1_ans is None:
             st.error("Pick an option first!")
         else:
             if q1_ans == "Fast (see a lot)":
-                st.session_state.city = st.session_state.city + 2
+                st.session_state.city += 2
             elif q1_ans == "Slow (relax)":
-                st.session_state.nature = st.session_state.nature + 2
+                st.session_state.nature += 2
             else:
-                st.session_state.city = st.session_state.city + 1
-                st.session_state.nature = st.session_state.nature + 1
+                st.session_state.city += 1
+                st.session_state.nature += 1
             st.session_state.q1 = True
             st.success("Q1 saved!")
 
@@ -61,27 +67,27 @@ q2_ans = st.multiselect(
 )
 
 if st.button("Submit Q2"):
-    if st.session_state.q2 == True:
+    if st.session_state.q2 is True:
         st.warning("Q2 already submitted!")
     else:
         if len(q2_ans) == 0:
             st.error("Choose at least one!")
         else:
             if "Museums" in q2_ans:
-                st.session_state.city = st.session_state.city + 2
+                st.session_state.city += 2
             if "Eat local food" in q2_ans:
-                st.session_state.city = st.session_state.city + 2
+                st.session_state.city += 2
             if "Night markets" in q2_ans:
-                st.session_state.city = st.session_state.city + 1
+                st.session_state.city += 1
             if "Hike" in q2_ans:
-                st.session_state.nature = st.session_state.nature + 2
+                st.session_state.nature += 2
             if "Beach" in q2_ans:
-                st.session_state.nature = st.session_state.nature + 2
+                st.session_state.nature += 2
 
             st.session_state.q2 = True
             st.success("Q2 submitted!")
 
-st.image("images/travel2.jpg", caption="City vs Nature")
+st.image(img_path("travel2.jpg"), caption="City vs Nature")
 st.divider()
 
 steps = st.number_input(
@@ -93,16 +99,16 @@ steps = st.number_input(
 )
 
 if st.button("Save Q3"):
-    if st.session_state.q3 == True:
+    if st.session_state.q3 is True:
         st.warning("Q3 already done!")
     else:
         if steps < 6500:
-            st.session_state.nature = st.session_state.nature + 2
+            st.session_state.nature += 2
         elif steps > 14000:
-            st.session_state.city = st.session_state.city + 2
+            st.session_state.city += 2
         else:
-            st.session_state.city = st.session_state.city + 1
-            st.session_state.nature = st.session_state.nature + 1
+            st.session_state.city += 1
+            st.session_state.nature += 1
         st.session_state.q3 = True
         st.success("Q3 saved!")
 
@@ -111,13 +117,13 @@ st.divider()
 busy = st.slider("4) Busy places? (0 quiet - 10 crowded)", 0, 10, 6)
 
 if st.button("Submit Q4"):
-    if st.session_state.q4 == True:
+    if st.session_state.q4 is True:
         st.warning("Q4 already submitted!")
     else:
         if busy >= 6:
-            st.session_state.city = st.session_state.city + 2
+            st.session_state.city += 2
         else:
-            st.session_state.nature = st.session_state.nature + 2
+            st.session_state.nature += 2
         st.session_state.q4 = True
         st.success("Q4 submitted!")
 
@@ -130,23 +136,23 @@ stay = st.selectbox(
 )
 
 if st.button("Submit Q5"):
-    if st.session_state.q5 == True:
+    if st.session_state.q5 is True:
         st.warning("Q5 already done!")
     else:
-        if stay == None:
+        if stay is None:
             st.error("Pick an option first!")
         else:
             if stay == "City center":
-                st.session_state.city = st.session_state.city + 2
+                st.session_state.city += 2
             elif stay == "Quiet country":
-                st.session_state.nature = st.session_state.nature + 2
+                st.session_state.nature += 2
             else:
-                st.session_state.city = st.session_state.city + 1
-                st.session_state.nature = st.session_state.nature + 1
+                st.session_state.city += 1
+                st.session_state.nature += 1
             st.session_state.q5 = True
             st.success("Q5 submitted!")
 
-st.image("images/travel3.jpg", caption="Your Travel Style")
+st.image(img_path("travel3.jpg"), caption="Your Travel Style")
 st.divider()
 
 st.subheader("Result")
