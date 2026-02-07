@@ -1,6 +1,7 @@
 import os
 import sys
 
+# ===== Path setup =====
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 ROOT_DIR = BASE_DIR
@@ -10,8 +11,6 @@ if ROOT_DIR not in sys.path:
 import streamlit as st
 import pandas as pd
 import info
-
-
 
 
 # =======================
@@ -85,7 +84,7 @@ def experience_section(experience_data):
 
     for job_title, (job_description, image) in experience_data.items():
         expander = st.expander(f"{job_title}")
-        expander.image(image, width=250)
+        expander.image(os.path.join(BASE_DIR, image), width=250)
 
         for bullet in job_description:
             expander.write(bullet)
@@ -156,3 +155,4 @@ def activities_section(leadership_data, activity_data):
     st.write("---")
 
 activities_section(info.leadership_data, info.activity_data)
+
