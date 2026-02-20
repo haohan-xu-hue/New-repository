@@ -1,27 +1,19 @@
 import os
 import streamlit as st
 
-# ====== Path setup (works locally + Streamlit Cloud) ======
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 def img_path(filename: str) -> str:
     return os.path.join(BASE_DIR, "images", filename)
 
 st.set_page_config(page_title="Travel Quiz", page_icon="🧳")
 
-# ============== Extra Credit 1: st.badge() ============== #EXTRA
-st.badge("CS1301 Lab1", color="#36c9a6")
-st.badge("Travel Quiz", color="#f63366")
-# ======================================================== #EXTRA
-
 st.title("🧳 Travel Preference Quiz")
 st.write("Answer 5 questions to find your perfect travel style!")
 
-# ============== Extra Credit 2: st.expander() ============== #EXTRA
 with st.expander("ℹ️ Quiz Rules (Click to expand)"):
     st.write("1. Answer all 5 questions to see your result")
     st.write("2. Each question has different score weights for City/Nature")
     st.write("3. Click 'Reset' to start the quiz over")
-# ========================================================== #EXTRA
 
 st.image(img_path("travel1.jpg"), caption="Wanderlust Adventures")
 st.divider()
@@ -43,20 +35,18 @@ if "q5" not in st.session_state:
 
 total_qs = 5
 completed_qs = sum([st.session_state.q1, st.session_state.q2, st.session_state.q3, st.session_state.q4, st.session_state.q5])
-st.progress(completed_qs / total_qs) #NEW
+st.progress(completed_qs / total_qs) 
 st.caption(f"Progress: {completed_qs}/{total_qs} questions answered")
 
 st.subheader("Current Score")
-# ============== Extra Credit 3: st.metric() ============== #EXTRA
+
 col1, col2 = st.columns(2)
 with col1:
     st.metric(label="🏙️ City Score", value=st.session_state.city)
 with col2:
     st.metric(label="🌿 Nature Score", value=st.session_state.nature)
-# ========================================================== #EXTRA
 st.divider()
 
-# ---------------------- Question 1: st.radio ----------------------
 q1_ans = st.radio(
     "1) What's your ideal travel pace?",
     ["Fast (see as much as possible)", "Slow (relax and unwind)", "Either one is fine"],
@@ -82,7 +72,6 @@ if st.session_state.q1:
     st.info("Q1: Submitted ✔️")
 st.divider()
 
-# ---------------------- Question 2: st.multiselect ----------------------
 q2_ans = st.multiselect(
     "2) What do you love to do most on trips? (Pick all that apply)",
     ["Visit museums", "Eat local food", "Go hiking", "Relax at the beach", "Explore night markets"]
@@ -109,7 +98,6 @@ if st.button("Submit Q2"):
 st.image(img_path("travel2.jpg"), caption="City Vibes vs Nature Calm", use_column_width=True)
 st.divider()
 
-# ---------------------- Question 3: st.number_input ----------------------
 steps = st.number_input(
     "3) Roughly how many steps do you walk per day on trips?",
     min_value=0,
@@ -134,7 +122,6 @@ if st.session_state.q3:
     st.info("Q3: Submitted ✔️")
 st.divider()
 
-# ---------------------- Question 4: st.slider ----------------------
 busy = st.slider("4) How do you feel about busy/crowded places? (0 = hate quiet → 10 = love crowded)", 0, 10, 6)
 if st.button("Submit Q4"):
     if st.session_state.q4 is True:
@@ -150,7 +137,6 @@ if st.session_state.q4:
     st.info("Q4: Submitted ✔️")
 st.divider()
 
-# ---------------------- Question 5: st.selectbox ----------------------
 stay = st.selectbox(
     "5) Where would you prefer to stay during a trip?",
     ["City center (close to everything)", "Quiet countryside (far from crowds)", "Either is fine with me"],
@@ -178,7 +164,6 @@ if st.session_state.q5:
 st.image(img_path("travel3.jpg"), caption="Your Perfect Travel Style Awaits!", use_column_width=True)
 st.divider()
 
-# ---------------------- Result Section ----------------------
 st.header("🏆 Your Travel Style Result")
 if st.button("Show My Result!"):
     if not (st.session_state.q1 and st.session_state.q2 and st.session_state.q3 and st.session_state.q4 and st.session_state.q5):
