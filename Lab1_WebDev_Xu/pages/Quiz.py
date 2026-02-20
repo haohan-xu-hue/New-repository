@@ -37,13 +37,6 @@ completed_qs = sum([st.session_state.q1, st.session_state.q2, st.session_state.q
 st.progress(completed_qs / total_qs)
 st.caption(f"Progress: {completed_qs}/{total_qs}")
 
-st.subheader("Current Score")
-col1, col2 = st.columns(2)
-with col1:
-    st.metric(label="City Score", value=st.session_state.city_score)
-with col2:
-    st.metric(label="🌿 Nature Score", value=st.session_state.nature)
-st.divider()
 
 q1_ans = st.radio(
     "1) What's your ideal travel pace?",
@@ -69,6 +62,7 @@ if st.button("Submit Q1"):
 if st.session_state.q1:
     st.write("✅ Q1 completed")
 st.divider()
+
 
 q2_ans = st.multiselect(
     "2) What do you do on trips? (pick all)",
@@ -96,6 +90,7 @@ if st.button("Submit Q2"):
 st.image(get_img("travel2.jpg"), caption="City vs Nature")
 st.divider()
 
+
 steps = st.number_input(
     "3) Steps per day on trips (roughly)",
     min_value=0,
@@ -120,6 +115,7 @@ if st.session_state.q3:
     st.info("Q3: Finished")
 st.divider()
 
+
 busy = st.slider("4) Busy places? (0=quiet, 10=crowded)", 0, 10, 6)
 if st.button("Submit Q4"):
     if st.session_state.q4:
@@ -134,6 +130,7 @@ if st.button("Submit Q4"):
 if st.session_state.q4:
     st.write("Q4: ✔️")
 st.divider()
+
 
 stay = st.selectbox(
     "5) Where would you stay?",
@@ -159,6 +156,16 @@ if st.button("Submit Q5"):
 
 st.image(get_img("travel3.jpg"), caption="Your Travel Style")
 st.divider()
+
+
+st.subheader("Current Score")
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(label="City Score", value=st.session_state.city_score)
+with col2:
+    st.metric(label="🌿 Nature Score", value=st.session_state.nature)
+st.divider()
+
 
 st.header("Your Travel Style Result")
 if st.button("Show result"):
@@ -193,5 +200,5 @@ if st.button("Reset Quiz"):
     st.session_state.q3 = False
     st.session_state.q4 = False
     st.session_state.q5 = False
-    st.session_state.q6 = False  
+    st.session_state.q6 = False
     st.success("Reset done! You can start over!")
