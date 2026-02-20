@@ -8,17 +8,28 @@ def img_path(filename: str) -> str:
 
 st.set_page_config(page_title="Travel Quiz", page_icon="🧳")
 
-st.title("Travel Preference Quiz")
-st.write("Lab 1 Quiz - answer 5 questions to find your style!")
+# ============== Extra Credit 1: st.badge() ============== #EXTRA
+st.badge("CS1301 Lab1", color="#36c9a6")
+st.badge("Travel Quiz", color="#f63366")
+# ======================================================== #EXTRA
 
-st.image(img_path("travel1.jpg"), caption="Travel Pic 1")
+st.title("🧳 Travel Preference Quiz")
+st.write("Answer 5 questions to find your perfect travel style!")
+
+# ============== Extra Credit 2: st.expander() ============== #EXTRA
+with st.expander("ℹ️ Quiz Rules (Click to expand)"):
+    st.write("1. Answer all 5 questions to see your result")
+    st.write("2. Each question has different score weights for City/Nature")
+    st.write("3. Click 'Reset' to start the quiz over")
+# ========================================================== #EXTRA
+
+st.image(img_path("travel1.jpg"), caption="Wanderlust Adventures")
 st.divider()
 
 if "city" not in st.session_state:
     st.session_state.city = 0
 if "nature" not in st.session_state:
     st.session_state.nature = 0
-
 if "q1" not in st.session_state:
     st.session_state.q1 = False
 if "q2" not in st.session_state:
@@ -30,77 +41,85 @@ if "q4" not in st.session_state:
 if "q5" not in st.session_state:
     st.session_state.q5 = False
 
-st.caption("Current score")
-st.write("City =", st.session_state.city, "| Nature =", st.session_state.nature)
+total_qs = 5
+completed_qs = sum([st.session_state.q1, st.session_state.q2, st.session_state.q3, st.session_state.q4, st.session_state.q5])
+st.progress(completed_qs / total_qs) #NEW
+st.caption(f"Progress: {completed_qs}/{total_qs} questions answered")
 
+st.subheader("Current Score")
+# ============== Extra Credit 3: st.metric() ============== #EXTRA
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(label="🏙️ City Score", value=st.session_state.city)
+with col2:
+    st.metric(label="🌿 Nature Score", value=st.session_state.nature)
+# ========================================================== #EXTRA
+st.divider()
+
+# ---------------------- Question 1: st.radio ----------------------
 q1_ans = st.radio(
-    "1) Travel pace?",
-    ["Fast (see a lot)", "Slow (relax)", "Either one"],
+    "1) What's your ideal travel pace?",
+    ["Fast (see as much as possible)", "Slow (relax and unwind)", "Either one is fine"],
     index=None
 )
-
-if st.button("Submit Q1"):
+if st.button("Submit Q1"): 
     if st.session_state.q1 is True:
-        st.warning("Oops! Q1 already done")
+        st.warning("Oops! Q1 is already submitted 📝")
     else:
         if q1_ans is None:
-            st.error("Pick an option first!")
+            st.error("Please pick an option first! ⚠️")
         else:
-            if q1_ans == "Fast (see a lot)":
+            if q1_ans == "Fast (see as much as possible)":
                 st.session_state.city += 2
-            elif q1_ans == "Slow (relax)":
+            elif q1_ans == "Slow (relax and unwind)":
                 st.session_state.nature += 2
             else:
                 st.session_state.city += 1
                 st.session_state.nature += 1
             st.session_state.q1 = True
-            st.success("Q1 saved!")
-
+            st.success("Q1 saved successfully! ✅")
 if st.session_state.q1:
-    st.write("Q1: submitted")
-
+    st.info("Q1: Submitted ✔️")
 st.divider()
 
+# ---------------------- Question 2: st.multiselect ----------------------
 q2_ans = st.multiselect(
-    "2) What do you do on trips? (pick all)",
-    ["Museums", "Eat local food", "Hike", "Beach", "Night markets"]
+    "2) What do you love to do most on trips? (Pick all that apply)",
+    ["Visit museums", "Eat local food", "Go hiking", "Relax at the beach", "Explore night markets"]
 )
-
 if st.button("Submit Q2"):
     if st.session_state.q2 is True:
-        st.warning("Q2 already submitted!")
+        st.warning("Oops! Q2 is already submitted 📝")
     else:
         if len(q2_ans) == 0:
-            st.error("Choose at least one!")
+            st.error("Please choose at least one activity! ⚠️")
         else:
-            if "Museums" in q2_ans:
+            if "Visit museums" in q2_ans:
                 st.session_state.city += 2
             if "Eat local food" in q2_ans:
                 st.session_state.city += 2
-            if "Night markets" in q2_ans:
+            if "Explore night markets" in q2_ans:
                 st.session_state.city += 1
-            if "Hike" in q2_ans:
+            if "Go hiking" in q2_ans:
                 st.session_state.nature += 2
-            if "Beach" in q2_ans:
+            if "Relax at the beach" in q2_ans:
                 st.session_state.nature += 2
-
             st.session_state.q2 = True
-            st.success("Q2 submitted!")
-
-st.image(img_path("travel2.jpg"), caption="City vs Nature")
+            st.success("Q2 submitted successfully! ✅")
+st.image(img_path("travel2.jpg"), caption="City Vibes vs Nature Calm", use_column_width=True)
 st.divider()
 
+# ---------------------- Question 3: st.number_input ----------------------
 steps = st.number_input(
-    "3) Steps per day on trips (roughly)",
+    "3) Roughly how many steps do you walk per day on trips?",
     min_value=0,
     max_value=40000,
     value=9000,
     step=500
 )
-
 if st.button("Save Q3"):
     if st.session_state.q3 is True:
-        st.warning("Q3 already done!")
+        st.warning("Oops! Q3 is already submitted 📝")
     else:
         if steps < 6500:
             st.session_state.nature += 2
@@ -110,73 +129,83 @@ if st.button("Save Q3"):
             st.session_state.city += 1
             st.session_state.nature += 1
         st.session_state.q3 = True
-        st.success("Q3 saved!")
-
+        st.success("Q3 saved successfully! ✅")
+if st.session_state.q3:
+    st.info("Q3: Submitted ✔️")
 st.divider()
 
-busy = st.slider("4) Busy places? (0 quiet - 10 crowded)", 0, 10, 6)
-
+# ---------------------- Question 4: st.slider ----------------------
+busy = st.slider("4) How do you feel about busy/crowded places? (0 = hate quiet → 10 = love crowded)", 0, 10, 6)
 if st.button("Submit Q4"):
     if st.session_state.q4 is True:
-        st.warning("Q4 already submitted!")
+        st.warning("Oops! Q4 is already submitted 📝")
     else:
         if busy >= 6:
             st.session_state.city += 2
         else:
             st.session_state.nature += 2
         st.session_state.q4 = True
-        st.success("Q4 submitted!")
-
+        st.success("Q4 submitted successfully! ✅")
+if st.session_state.q4:
+    st.info("Q4: Submitted ✔️")
 st.divider()
 
+# ---------------------- Question 5: st.selectbox ----------------------
 stay = st.selectbox(
-    "5) Where would you stay?",
-    ["City center", "Quiet country", "Either is fine"],
+    "5) Where would you prefer to stay during a trip?",
+    ["City center (close to everything)", "Quiet countryside (far from crowds)", "Either is fine with me"],
     index=None
 )
-
 if st.button("Submit Q5"):
     if st.session_state.q5 is True:
-        st.warning("Q5 already done!")
+        st.warning("Oops! Q5 is already submitted 📝")
     else:
         if stay is None:
-            st.error("Pick an option first!")
+            st.error("Please pick an option first! ⚠️")
         else:
-            if stay == "City center":
+            if stay == "City center (close to everything)":
                 st.session_state.city += 2
-            elif stay == "Quiet country":
+            elif stay == "Quiet countryside (far from crowds)":
                 st.session_state.nature += 2
             else:
                 st.session_state.city += 1
                 st.session_state.nature += 1
             st.session_state.q5 = True
-            st.success("Q5 submitted!")
+            st.success("Q5 submitted successfully! ✅")
+if st.session_state.q5:
+    st.info("Q5: Submitted ✔️")
 
-st.image(img_path("travel3.jpg"), caption="Your Travel Style")
+st.image(img_path("travel3.jpg"), caption="Your Perfect Travel Style Awaits!", use_column_width=True)
 st.divider()
 
-st.subheader("Result")
-
-if st.button("Show result"):
+# ---------------------- Result Section ----------------------
+st.header("🏆 Your Travel Style Result")
+if st.button("Show My Result!"):
     if not (st.session_state.q1 and st.session_state.q2 and st.session_state.q3 and st.session_state.q4 and st.session_state.q5):
-        st.error("Finish all questions first")
+        st.error("Please finish all 5 questions first! ⚠️")
     else:
+        st.balloons() #NEW
         c = st.session_state.city
         n = st.session_state.nature
 
-        st.write("Final score -> City:", c, "| Nature:", n)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric(label="🏙️ Final City Score", value=c) #EXTRA
+        with col2:
+            st.metric(label="🌿 Final Nature Score", value=n) #EXTRA
+        st.divider()
 
         if c > n:
-            st.write("City traveler")
-            st.write("You like busy areas, food, and attractions.")
+            st.subheader("You are a CITY TRAVELER! 🏙️")
+            st.write("You love the hustle and bustle of cities, exploring local food, museums, and night markets—your perfect trip is filled with endless activities and new sights!")
         elif n > c:
-            st.write("Nature traveler")
-            st.write("You prefer quiet places and outdoor stuff.")
+            st.subheader("You are a NATURE TRAVELER! 🌿")
+            st.write("You crave quiet and calm, hiking through trails, relaxing at the beach, and escaping the crowds—your perfect trip is all about connecting with the great outdoors!")
         else:
-            st.write("Balanced")
-            st.write("A bit of both is good for you.")
+            st.subheader("You are a BALANCED TRAVELER! ⚖️")
+            st.write("You love the best of both worlds—you can enjoy a busy city day and then unwind in a quiet nature spot! Any trip is perfect as long as it's an adventure!")
 
-if st.button("Reset"):
+if st.button("🔄 Reset Quiz", type="secondary"):
     st.session_state.city = 0
     st.session_state.nature = 0
     st.session_state.q1 = False
@@ -184,4 +213,4 @@ if st.button("Reset"):
     st.session_state.q3 = False
     st.session_state.q4 = False
     st.session_state.q5 = False
-    st.success("Reset done")
+    st.success("Quiz reset successfully! You can start over now ✨")
